@@ -30,16 +30,16 @@ public class DatabaseAdd extends DatabaseAction {
     @Override
     public void notify(Input input, ArrayNode output, Action action, ObjectMapper objectMapper) {
         Movie movie = action.getAddedMovie();
+        int sent = 0;
 
         for(User user : input.getUsers()) {
-            if(movie.getCountriesBanned().contains(user.getCredentials().getCountry())) {
-                //output.add(objectMapper.valueToTree(new FormattedOutput()));
-            } else {
+            if(!movie.getCountriesBanned().contains(user.getCredentials().getCountry())) {
                 if (user.getSubcribedGenres() != null) {
                     for (String userGenre : user.getSubcribedGenres()) {
-                        if (movie.getGenres().contains(userGenre)) {
+                        if (movie.getGenres().contains(userGenre) && sent == 0) {
                             Notification newNotification = new Notification(movie.getName(), "ADD");
                             user.getNotifications().add(newNotification);
+                            sent = 1;
                         }
                     }
                 }

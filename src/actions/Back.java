@@ -26,7 +26,6 @@ public abstract class Back extends BackAction {
         if(currentUser != null) {
             String page = pageHistory.get(getPageHistory().size() - 2);
             if(!pageHistory.isEmpty()) {
-                System.out.println(page + pageHistory.size());
                 switch (page) {
                     case "hpauth" -> hpAuth(currentPage, currentUser, output, objectMapper);
                     case "login" -> login(currentPage, currentUser, output, objectMapper);

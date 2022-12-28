@@ -156,7 +156,7 @@ abstract class OnPageAction {
         int totalTokens = Integer.parseInt(currentUser.getUser().getCredentials().getBalance());
         int wantedTokens = Integer.parseInt(action.getCount());
         if (wantedTokens <= totalTokens) {
-            currentUser.getUser().setTokensCount(wantedTokens);
+            currentUser.getUser().setTokensCount(currentUser.getUser().getTokensCount() + wantedTokens);
             currentUser.getUser().getCredentials().setBalance(
                     Integer.toString(totalTokens - wantedTokens));
         } else {
@@ -242,10 +242,7 @@ abstract class OnPageAction {
             if (purchased == 1 && watched == 0) {
                 currentUser.getUser().getWatchedMovies().add(new Movie(currentMovie));
                 output.add(objectMapper.valueToTree(new FormattedOutput(currentUser.getUser(), currentMovie)));
-            } else {
-                //output.add(objectMapper.valueToTree(new FormattedOutput()));
             }
-
         } else {
             output.add(objectMapper.valueToTree(new FormattedOutput()));
         }

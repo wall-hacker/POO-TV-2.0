@@ -13,6 +13,7 @@ abstract class BackAction {
                       final ArrayNode output, final ObjectMapper objectMapper) {
         if (currentUser.getUser() != null) {
             Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+            currentPage.setCurrentPage("hpauth", null, null);
         } else {
             output.add(objectMapper.valueToTree(new FormattedOutput()));
         }

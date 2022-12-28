@@ -81,6 +81,8 @@ abstract class ChangePageAction {
             } else {
                 output.add(objectMapper.valueToTree(new FormattedOutput()));
             }
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
         }
     }
 

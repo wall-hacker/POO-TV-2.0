@@ -37,13 +37,6 @@ public abstract class Recommandation {
 
             TreeMap<String, Integer> tm = new  TreeMap<> (map);
 
-            /*Iterator itr=tm.keySet().iterator();
-            while(itr.hasNext())
-            {
-                String key=(String)itr.next();
-                System.out.println("Roll no:  "+key+"     name:   "+tm.get(key));
-            }*/
-
             ArrayList<Movie> sortedMovies = new ArrayList<>();
             sortedMovies.addAll(currentPage.getMoviesList());
             sortedMovies.sort(Comparator.comparingInt(Movie::getNumLikes).reversed());
@@ -54,7 +47,6 @@ public abstract class Recommandation {
             while(itr.hasNext() && found == 0) {
                 String genre = (String)itr.next();
                 for (Movie movie : sortedMovies) {
-                    //System.out.println(movie.getName() + movie.getNumLikes());
                     if(movie.getGenres().contains(genre) && !currentUser.getUser().getLikedMovies().contains(movie) && found == 0) {
                         recommendedMovie = movie.getName();
                         found = 1;
