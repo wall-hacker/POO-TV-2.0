@@ -1,0 +1,101 @@
+package actions;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import database.Action;
+import database.Movie;
+
+import java.util.ArrayList;
+
+abstract class BackAction {
+
+    static void hpAuth(final CurrentPage currentPage, final CurrentUser currentUser,
+                      final ArrayNode output, final ObjectMapper objectMapper) {
+        if (currentUser.getUser() != null) {
+            Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+    static void login(final CurrentPage currentPage, final CurrentUser currentUser,
+                      final ArrayNode output, final ObjectMapper objectMapper) {
+        if (currentUser.getUser() == null) {
+            Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+            currentPage.setCurrentPage("login", null, null);
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+
+    static void register(final CurrentPage currentPage, final CurrentUser currentUser,
+                         final ArrayNode output, final ObjectMapper objectMapper) {
+        if (currentUser.getUser() == null) {
+            Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+            currentPage.setCurrentPage("register", null, null);
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+
+    static void logout(final CurrentPage currentPage, final CurrentUser currentUser,
+                       final ArrayNode output, final ObjectMapper objectMapper) {
+        if (currentUser.getUser() != null) {
+            currentUser.setUser(null);
+            currentPage.setCurrentPage("homepage", null, null);
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+
+    static void movies(final CurrentPage currentPage, final CurrentUser currentUser,
+                       final ArrayNode output, final ObjectMapper objectMapper) {
+        if (currentUser.getUser() != null) {
+            currentPage.setMoviesList(currentPage.getInput().getMovies());
+
+            ArrayList<Movie> movies = currentPage.getMoviesList();
+            ArrayList<Movie> unbannedMovies = new ArrayList<Movie>();
+            for (Movie movie : movies) {
+                String country = currentUser.getUser().getCredentials().getCountry();
+                if (!movie.getCountriesBanned().contains(country)) {
+                    unbannedMovies.add(movie);
+                }
+            }
+            Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+            currentPage.setCurrentPage("movies", null, unbannedMovies);
+
+            output.add(objectMapper.valueToTree(new FormattedOutput(currentPage.getMoviesList(),
+                    currentUser.getUser())));
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+
+    static void seeDetails(final Action action, final CurrentPage currentPage,
+                           final CurrentUser currentUser, final ArrayNode output,
+                           final ObjectMapper objectMapper) {
+        Movie currentMovie = null;
+        ArrayList<Movie> movies = currentPage.getMoviesList();
+        for (Movie movie : movies) {
+            if (movie.getName().equals(action.getMovie())) {
+                currentMovie = movie;
+            }
+        }
+        if (currentMovie != null) {
+            Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+            currentPage.setCurrentPage("see details", currentMovie, movies);
+            output.add(objectMapper.valueToTree((new FormattedOutput(currentUser.getUser(), currentMovie))));
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+
+    static void upgrades(final CurrentPage currentPage, final CurrentUser currentUser,
+                         final ArrayNode output, final ObjectMapper objectMapper) {
+        if (currentUser.getUser() != null) {
+            Back.getPageHistory().remove(Back.getPageHistory().size() - 1);
+            currentPage.setCurrentPage("upgrades", null, null);
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
+        }
+    }
+}
