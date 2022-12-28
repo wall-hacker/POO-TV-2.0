@@ -1,11 +1,19 @@
 package actions;
 
+import actions.entities.CurrentPage;
+import actions.entities.CurrentUser;
+import actions.entities.FormattedOutput;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import database.Movie;
 import database.Notification;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.Iterator;
+
 
 public abstract class Recommandation {
     /**
@@ -16,16 +24,17 @@ public abstract class Recommandation {
      */
     public static void run(final CurrentPage currentPage, final CurrentUser currentUser,
                            final ArrayNode output, final ObjectMapper objectMapper) {
-        if(currentUser.getUser() != null && currentUser.getUser().getCredentials().getAccountType().equals("premium")) {
+        if (currentUser.getUser() != null && currentUser.getUser().
+                getCredentials().getAccountType().equals("premium")) {
             String recommendedMovie = null;
             Notification newNotification = null;
 
             HashMap<String, Integer> map = new HashMap<>();
             ArrayList<Movie> likedMovies = currentUser.getUser().getLikedMovies();
-            for(Movie movie : likedMovies) {
+            for (Movie movie : likedMovies) {
                 ArrayList<String> movieGenres = movie.getGenres();
-                for(String genre : movieGenres) {
-                    if(map.containsKey(genre)) {
+                for (String genre : movieGenres) {
+                    if (map.containsKey(genre)) {
                         Integer value = map.get(genre);
                         value++;
                         map.put(genre, value);
@@ -35,27 +44,26 @@ public abstract class Recommandation {
                 }
             }
 
-            TreeMap<String, Integer> tm = new  TreeMap<> (map);
+            TreeMap<String, Integer> treeMap = new TreeMap<>(map);
 
-            ArrayList<Movie> sortedMovies = new ArrayList<>();
-            sortedMovies.addAll(currentPage.getMoviesList());
+            ArrayList<Movie> sortedMovies = new ArrayList<>(currentPage.getMoviesList());
             sortedMovies.sort(Comparator.comparingInt(Movie::getNumLikes).reversed());
 
             int found = 0;
 
-            Iterator itr =tm.keySet().iterator();
-            while(itr.hasNext() && found == 0) {
-                String genre = (String)itr.next();
+            Iterator<String> itr = treeMap.keySet().iterator();
+            while (itr.hasNext() && found == 0) {
+                String genre = itr.next();
                 for (Movie movie : sortedMovies) {
-                    if(movie.getGenres().contains(genre) && !currentUser.getUser().getLikedMovies().contains(movie) && found == 0) {
+                    if (movie.getGenres().contains(genre) && !currentUser.getUser().
+                            getLikedMovies().contains(movie) && found == 0) {
                         recommendedMovie = movie.getName();
                         found = 1;
                     }
                 }
             }
 
-
-            if(recommendedMovie != null) {
+            if (recommendedMovie != null) {
                 newNotification = new Notification(recommendedMovie, "Recommendation");
             } else {
                 newNotification = new Notification("No recommendation", "Recommendation");
