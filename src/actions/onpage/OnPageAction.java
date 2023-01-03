@@ -255,8 +255,10 @@ abstract class OnPageAction {
                 output.add(objectMapper.valueToTree(new FormattedOutput()));
             }
 
-            if (purchased == 1 && watched == 0) {
-                currentUser.getUser().getWatchedMovies().add(new Movie(currentMovie));
+            if (purchased == 1) {
+                if (watched == 0) {
+                    currentUser.getUser().getWatchedMovies().add(new Movie(currentMovie));
+                }
                 output.add(objectMapper.valueToTree(new FormattedOutput(currentUser.getUser(),
                         currentMovie)));
             }
@@ -390,6 +392,29 @@ abstract class OnPageAction {
                     ratedMovies.set(i, currentMovie);
                 }
             }
+        }
+    }
+
+    public static void subscribe(final Action action, final CurrentPage currentPage,
+                           final CurrentUser currentUser, final ArrayNode output,
+                           final ObjectMapper objectMapper) {
+        if (currentUser.getUser() != null) {
+            if (currentPage.getName().equals("see details")) {
+                String genre = action.getSubscribedGenre();
+                if (currentPage.getCurrentMovie().getGenres().contains(genre)) {
+                    if (!currentUser.getUser().getSubcribedGenres().contains(genre)) {
+                        currentUser.getUser().getSubcribedGenres().add(genre);
+                    } else {
+                        output.add(objectMapper.valueToTree(new FormattedOutput()));
+                    }
+                } else {
+                    output.add(objectMapper.valueToTree(new FormattedOutput()));
+                }
+            } else {
+                output.add(objectMapper.valueToTree(new FormattedOutput()));
+            }
+        } else {
+            output.add(objectMapper.valueToTree(new FormattedOutput()));
         }
     }
 }

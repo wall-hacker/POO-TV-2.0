@@ -1,11 +1,10 @@
+import actions.Recommandation;
+import actions.back.Back;
 import actions.changepage.ChangePage;
+import actions.database.Database;
 import actions.entities.CurrentPage;
 import actions.entities.CurrentUser;
-import actions.Recommandation;
-import actions.Subscribe;
-import actions.database.Database;
 import actions.onpage.OnPage;
-import actions.back.Back;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -34,8 +33,6 @@ abstract class Main {
                 case "on page" -> OnPage.run(action, currentPage, currentUser, output,
                         objectMapper);
                 case "back" -> Back.run(action, currentPage, currentUser, output,
-                        objectMapper);
-                case "subscribe" -> Subscribe.run(action, currentPage, currentUser, output,
                         objectMapper);
                 case "database" -> Database.run(action, currentPage, currentUser, output,
                         objectMapper);

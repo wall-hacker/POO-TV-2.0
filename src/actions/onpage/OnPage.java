@@ -39,6 +39,8 @@ public abstract class OnPage extends OnPageAction {
                     objectMapper);
             case "rate" -> rate(action, currentPage, currentUser, output,
                     objectMapper);
+            case "subscribe" -> subscribe(action, currentPage, currentUser, output,
+                    objectMapper);
             default -> throw new IllegalStateException("Unexpected value: " + feature);
         }
     }

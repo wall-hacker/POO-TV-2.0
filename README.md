@@ -14,7 +14,7 @@
 **1] actions package:**
  - The actions package contains the implementations of all
 desired functionalities, be it a ChangePage, OnPage, **Back, 
-Database, Recommandation or Subscribe type action**
+Database or Recommandation type action**
  
 - **The back package contains the BackAction class which contains
 all the methods or as I call them actions related to reverting 
@@ -41,9 +41,6 @@ parameter given to the creation method**
 - **The Recommandation class generates a notification (another sort of observer
 pattern update function) based on certain criteria only if the active user is a premium user**
 
-- **The Subscribe class subscribe the active user to a certain genre thus affecting the outcome
-of the recommandation functionality**
-
 - The entities package just contains the CurrentPage, CurrentUser and Formatted Output
 classes which are used by almost every other class
 
@@ -58,9 +55,11 @@ call them actions that can happen on the current page(login,
 register, search, filter, buyTokens, buyPremiumAccount,
 purchase, watch, like, rate); these methods are then called
 using a switch statement by a subclass named OnPage
+  - **Added a subscribe method which subscribes the active user to a certain genre thus affecting the outcome
+    of the recommandation functionality**
 
 - The main abstract classes, namely: ChangePage, OnPage, **Back,
-  Database, Recommandation and Subscribe**, are then called by the Main
+  Database, Recommandation**, are then called by the Main
 method of the program in order to generate the desired output
 
 **2] database package:**
