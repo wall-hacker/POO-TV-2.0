@@ -7,7 +7,23 @@
                              
   ````
   
-
+- - -
+### Description
+- - -  
+Poo-Tv is a backend implementation of a platform for watching
+movies/series from the user's perspective. The basic functionalities
+offered for this platform include logging in, registering, and moving
+on a specific page available. From the movies page, the user can also
+search for a specific movie, filter the movie list based on desired
+actors, genres, and even sort movies based on duration and rating.
+In order to watch a movie, the user has to purchase it for the
+standard price (2 tokens), or for free if the user has premium
+account. A user can upgrade his account to premium for 10 tokens and
+get 15 free movies, then he pays 2 tokens for each purchase movie
+just like standard users. After purchasing the movie, the user can
+watch it, then like and rate the movie from 1 to 5. The tokens are
+taken explicitly by the user from his balance. At the end, the user
+can log out and the platform is restores to unauthenticated homepage.
 - - -
 ### Structure && Implementation 
 - - -
